@@ -1,7 +1,7 @@
 {
   "name": "grunt-terminal-browser",
   "description": "Show terminal error log output to browser.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "homepage": "",
   "author": {
     "name": "yihouzenmeban",
@@ -10,10 +10,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/babel/babel-eslint.git"
+    "url": "git+https://github.com/yihouzenmeban/grunt-terminal-browser.git"
   },
   "bugs": {
-    "url": "https://github.com/babel/babel-eslint/issues"
+    "url": "https://github.com/yihouzenmeban/grunt-terminal-browser/issues"
   },
   "licenses": ["MIT"],
   "engines": {

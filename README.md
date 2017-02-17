@@ -73,6 +73,5 @@ And in your index.html add put `?ssl=true` on the end of the client.js script ta
 ```
 
 ## Release History
- - 2/18/2017 - v0.2.1 - Add screenshot and fix some syntax error.
- - 2/18/2017 - v0.2.0 - Initial release.
+ - 2/18/2017 - v0.2.0 - modify grunt-browser-output.
  - 3/13/2014 - v0.1.0 - Initial release.
