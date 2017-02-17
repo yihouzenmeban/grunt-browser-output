@@ -1,7 +1,7 @@
 {
   "name": "grunt-terminal-browser",
   "description": "Show terminal error log output to browser.",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "homepage": "",
   "author": {
     "name": "yihouzenmeban",

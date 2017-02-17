@@ -7,7 +7,7 @@ This plugin will mirror the Grunt console output in a browser window when a plug
 shows warnings or errors. The motivation is to avoid having to toggle back to a terminal window to see errors
 (ex. JSHint warnings) during a grunt/watch/livereload session.
 
-![](screenshot.png)
+![](browser.png)
 
 Only works in modern browsers with WebSocket support.
 
