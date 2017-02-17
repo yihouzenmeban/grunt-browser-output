@@ -2,7 +2,7 @@
 
 > Show grunt errors in a popup window in your browser.
 
-This plugin forked from [grunt-browser-output](https://github.com/rarila/grunt-browser-output), because some reason modify some code and take example by Webpack to make output in browser seens more beautiful.
+This plugin forked from [grunt-browser-output](https://github.com/rarila/grunt-browser-output), when use eslint-friendly-formatter to format eslint log error, grunt-browser-output in browser ugly, so I am take example by Webpack and change some code to make output in browser seens more beautiful.
 This plugin will mirror the Grunt console output in a browser window when a plugin
 shows warnings or errors. The motivation is to avoid having to toggle back to a terminal window to see errors
 (ex. JSHint warnings) during a grunt/watch/livereload session.
