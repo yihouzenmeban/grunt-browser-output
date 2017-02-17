@@ -20,12 +20,15 @@ convert.setColors(colors);
 
 module.exports = function(grunt) {
 
-    grunt.registerMultiTask('terminal_browser', 'Show grunt output to the browser.', function() {
+    grunt.registerTask('terminal_browser', 'Show grunt output to the browser.', function() {
         var options = this.options({
             port: 37901
         });
 
+        var WebSocketServer = ws.Server;
+
         var wss;
+
         if (!options.ssl) {
             wss = new WebSocketServer({
                 port: options.port
@@ -64,7 +67,7 @@ module.exports = function(grunt) {
                     removeLine: true
                 };
             } else if (arguments[0] === '\x1b[1G') {
-                return;
+                return false;
             } else {
                 var html = convert(arguments[0]);
                 if (html[0] !== '<') {
@@ -77,7 +80,6 @@ module.exports = function(grunt) {
                     isError: arguments[0].indexOf('Warning:') === 5
                 };
             }
-
             wss.broadcast(data);
 
         });
