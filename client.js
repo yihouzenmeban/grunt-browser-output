@@ -1,61 +1,85 @@
-  (function grunt_browser_output(ssl){
-
-    if (typeof ssl === 'undefined'){
-      var scripts= document.getElementsByTagName('script');
-      var path= scripts[scripts.length-1].src; 
-      var indexOfSsl = path.indexOf('ssl=');
-      ssl = (indexOfSsl === -1 ? false : path.substr(indexOfSsl + 4,4) === 'true');
+(function gruntTerminalBrowser(ssl) {
+    if (typeof ssl === 'undefined') {
+        var scripts = document.getElementsByTagName('script');
+        var path = scripts[scripts.length - 1].src;
+        var indexOfSsl = path.indexOf('ssl=');
+        ssl = (indexOfSsl === -1 ? false : path.substr(indexOfSsl + 4, 4) === 'true');
     }
 
     var state = document.readyState;
-    if(state !== 'interactive' && state !== 'complete') {
-      setTimeout(grunt_browser_output.bind(this,ssl), 100);
-      return;
+    if (state !== 'interactive' && state !== 'complete') {
+        setTimeout(gruntTerminalBrowser.bind(this, ssl), 100);
+        return;
     }
 
-    if (typeof WebSocket === undefined){
-      console.log('grunt-browser-output - websockets not available');
-      return;
+    if (typeof WebSocket === 'undefined') {
+        console.log('grunt-terminal-browser - websockets not available');
+        return;
     }
 
     var protocol = ssl ? 'wss' : 'ws';
 
     var connection = new WebSocket(protocol + '://' + location.hostname + ':37901');
-    connection.onmessage = function(e){
-      var data = JSON.parse(e.data);
-      var pre = document.querySelector('#grunt-browser-output>pre');
-      if (data.line) {
-        $('#grunt-browser-output>pre').append(data.line);
-        pre.scrollTop = pre.scrollHeight;
-      }
-      if (data.removeLine) {
-        pre.removeChild(pre.children[pre.children.length-1]);
-      }
-      if (data.isError) {
-        document.querySelector('#grunt-browser-output').style.display = 'block';
-      }
+    connection.onmessage = function (e) {
+        var data = JSON.parse(e.data);
+        var pre = document.querySelector('#grunt-terminal-browser>pre');
+        if (data.line) {
+            pre.insertAdjacentHTML('beforeEnd', data.line);
+            pre.scrollTop = pre.scrollHeight;
+        }
+        if (data.removeLine) {
+            pre.removeChild(pre.children[pre.children.length - 1]);
+        }
+        if (data.isError) {
+            document.querySelector('#grunt-terminal-browser').style.display = 'block';
+        }
 
-      while (pre.children.length > 300) {
-        pre.removeChild(pre.children[0]);
-      }
-      //need to delete the lines over time else the browser will get bogged down
+        while (pre.children.length > 300) {
+            pre.removeChild(pre.children[0]);
+        }
+        // need to delete the lines over time else the browser will get bogged down
     };
 
     var elem = document.createElement('div');
-    elem.id = 'grunt-browser-output';
-    elem.style.display = 'none';
-    elem.style.position = 'fixed';
-    elem.style.top = elem.style.left = elem.style.bottom = elem.style.right = '10px';
-    elem.style.paddingTop = '0px';
-    elem.style.zIndex = 9999999;
+    var styles = {
+        fontFamily: 'Monaco, Consolas, monospace, Microsoft Yahei',
+        color: '#E8E8E8',
+        backgroundColor: 'rgba(0,0,0,0.85)',
+        fontSize: '13px',
+        position: 'fixed',
+        zIndex: 9999,
+        padding: '10px',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        dir: 'ltr',
+        display: 'none'
+    };
+    for (var key in styles) {
+        elem.style[key] = styles[key];
+    }
+    elem.id = 'grunt-terminal-browser';
 
     var pre = document.createElement('pre');
-    pre.style.backgroundColor = 'black';
-    pre.style.color = '#CCC';
-    pre.style.position = 'absolute';
-    pre.style.top = pre.style.left = pre.style.bottom = pre.style.right = '0px';
-    pre.style.overflowY = 'scroll';
-    pre.style.marginBottom = '0px';
+    styles = {
+        position: 'absolute',
+        backgroundColor: 'transparent',
+        fontFamily: 'Monaco, Consolas, monospace, Microsoft Yahei',
+        overflowY: 'scroll',
+        background: 'transparent',
+        lineHeight: '1.2',
+        fontSize: '13px',
+        padding: '10px',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
+    };
+    for (var key in styles) {
+        pre.style[key] = styles[key];
+    }
+
     elem.appendChild(pre);
 
     var toolbar = document.createElement('div');
@@ -67,8 +91,8 @@
 
     var link = document.createElement('a');
     link.style.color = 'grey';
-    link.href = 'http://github.com/cgross/grunt-browser-output';
-    link.innerHTML = 'grunt-browser-output';
+    link.href = 'http://github.com/yihouzenmeban/grunt-terminal-browser';
+    link.innerHTML = 'adapted from grunt-browser-output';
     toolbar.appendChild(link);
 
     var sep = document.createElement('span');
@@ -79,9 +103,9 @@
     link.style.color = 'grey';
     link.href = '#';
     link.innerHTML = 'clear';
-    link.addEventListener('click',function(e){
-      e.preventDefault();
-      pre.innerHTML = '';
+    link.addEventListener('click', function (e) {
+        e.preventDefault();
+        pre.innerHTML = '';
     });
     toolbar.appendChild(link);
 
@@ -93,12 +117,11 @@
     link.style.color = 'grey';
     link.href = '#';
     link.innerHTML = 'close';
-    link.addEventListener('click',function(e){
-      e.preventDefault();
-      elem.style.display = 'none';
+    link.addEventListener('click', function (e) {
+        e.preventDefault();
+        elem.style.display = 'none';
     });
     toolbar.appendChild(link);
 
     document.body.appendChild(elem);
-
 })();
