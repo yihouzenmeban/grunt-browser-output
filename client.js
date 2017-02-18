@@ -9,16 +9,15 @@
     var state = document.readyState;
     if (state !== 'interactive' && state !== 'complete') {
         setTimeout(gruntTerminalBrowser.bind(this, ssl), 100);
-        return;
+        return false;
     }
 
     if (typeof WebSocket === 'undefined') {
         console.log('grunt-terminal-browser - websockets not available');
-        return;
+        return false;
     }
 
     var protocol = ssl ? 'wss' : 'ws';
-
     var connection = new WebSocket(protocol + '://' + location.hostname + ':37901');
     connection.onmessage = function (e) {
         var data = JSON.parse(e.data);
@@ -34,14 +33,23 @@
             document.querySelector('#grunt-terminal-browser').style.display = 'block';
         }
 
+        // need to delete the lines over time else the browser will get bogged down
         while (pre.children.length > 300) {
             pre.removeChild(pre.children[0]);
         }
-        // need to delete the lines over time else the browser will get bogged down
     };
 
-    var elem = document.createElement('div');
-    var styles = {
+
+    function createElemStyle(name, styleObj) {
+        var element = document.createElement(name);
+        for (var key in styleObj) {
+            element.style[key] = styleObj[key];
+        }
+        return element;
+    }
+
+
+    var wrap = createElemStyle('div', {
         fontFamily: 'Monaco, Consolas, monospace, Microsoft Yahei',
         color: '#E8E8E8',
         backgroundColor: 'rgba(0,0,0,0.85)',
@@ -55,14 +63,11 @@
         bottom: 0,
         dir: 'ltr',
         display: 'none'
-    };
-    for (var key in styles) {
-        elem.style[key] = styles[key];
-    }
-    elem.id = 'grunt-terminal-browser';
+    });
+    wrap.id = 'grunt-terminal-browser';
 
-    var pre = document.createElement('pre');
-    styles = {
+
+    var pre = createElemStyle('pre', {
         position: 'absolute',
         backgroundColor: 'transparent',
         fontFamily: 'Monaco, Consolas, monospace, Microsoft Yahei',
@@ -75,19 +80,17 @@
         right: 0,
         top: 0,
         bottom: 0
-    };
-    for (var key in styles) {
-        pre.style[key] = styles[key];
-    }
+    });
+    wrap.appendChild(pre);
 
-    elem.appendChild(pre);
 
-    var toolbar = document.createElement('div');
-    toolbar.style.position = 'absolute';
-    toolbar.style.top = '5px';
-    toolbar.style.right = '25px';
-    toolbar.style.zIndex = 999999;
-    elem.appendChild(toolbar);
+    var toolbar = createElemStyle('div', {
+        position: 'absolute',
+        top: '5px',
+        right: '25px',
+        zIndex: 10000
+    });
+    wrap.appendChild(toolbar);
 
     var link = document.createElement('a');
     link.style.color = 'grey';
@@ -123,5 +126,5 @@
     });
     toolbar.appendChild(link);
 
-    document.body.appendChild(elem);
+    document.body.appendChild(wrap);
 })();
