@@ -122,7 +122,7 @@
     link.innerHTML = 'close';
     link.addEventListener('click', function (e) {
         e.preventDefault();
-        elem.style.display = 'none';
+        wrap.style.display = 'none';
     });
     toolbar.appendChild(link);
 
